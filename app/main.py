@@ -4,8 +4,24 @@ import scraper
 
 app = Flask(__name__)
 
+@app.route("/")
+def landing():
+    return "Welcome to Scraper! (pony)"
+
+@app.route("/links/<path:url>")
+def alllinks(url):
+    content = scraper.scrape_url_for_links("http://" + scraper.decode_url(url))
+    return render_template("content.html",
+                            content=content)
+
+@app.route("/text/<path:url>")
+def alltext(url):
+    content = scraper.scrape_url_for_text("http://" + scraper.decode_url(url))
+    return render_template("content.html",
+                            content=content)
+
 @app.route("/<path:url>", methods=['GET'])
-def hello(url):
+def fulltake(url):
     content = scraper.scrape_url("http://" + scraper.decode_url(url))
     return render_template("content.html",
                             content=content)
