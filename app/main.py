@@ -8,6 +8,12 @@ app = Flask(__name__)
 def landing():
     return "Welcome to Scraper! (pony)"
 
+@app.route("/images/<path:url>")
+def allimages(url):
+    content = scraper.scrape_url_for_images("http://" + scraper.decode_url(url))
+    return render_template("content.html",
+                            content=content)
+
 @app.route("/links/<path:url>")
 def alllinks(url):
     content = scraper.scrape_url_for_links("http://" + scraper.decode_url(url))

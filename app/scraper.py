@@ -15,6 +15,28 @@ stream_handler.setFormatter(formatter)
 
 logger.addHandler(stream_handler)
 
+def scrape_url_for_images(url):
+    """
+    Given a url, return links to all the images
+    used on the page along with the alt text if
+    present.
+
+    :param url: URL to scrape
+    :return: The images and alt text (if present) of the page
+    """
+    page_content = scrape_url(url)
+    soup = BeautifulSoup(page_content, 'html.parser')
+    results = ""
+    for img in soup.find_all('img'):
+        if img.get('src'):
+            results += img.get('src')
+            if img.string:
+                results += img.string
+
+            results += '\n'
+
+    return results
+
 def scrape_url_for_links(url):
     """
     Given a url, return all the links
@@ -30,9 +52,9 @@ def scrape_url_for_links(url):
         if link.get('href'):
             if link.string:
                 print(link.string)
-                results += link.string + ": " + link.get('href')
+                results += link.string + ": " + link.get('href') + '\n'
             else:
-                results += link.get('href')
+                results += link.get('href') + '\n'
 
     return results
 
