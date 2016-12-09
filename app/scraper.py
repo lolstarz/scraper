@@ -24,14 +24,13 @@ def scrape_url_for_images(url):
     :param url: URL to scrape
     :return: The images and alt text (if present) of the page
     """
-    page_content = scrape_url(url)
-    soup = BeautifulSoup(page_content, 'html.parser')
+    soup = scrape_url(url)
     results = ""
     for img in soup.find_all('img'):
         if img.get('src'):
             results += img.get('src')
             if img.string:
-                results += img.string
+                results +=  " " + img.string
 
             results += '\n'
 
