@@ -45,8 +45,7 @@ def scrape_url_for_links(url):
     :param url: URL to scrape
     :return: The links of the page
     """
-    page_content = scrape_url(url)
-    soup = BeautifulSoup(page_content, 'html.parser')
+    soup = scrape_url(url)
     results = ""
     for link in soup.find_all('a'):
         if link.get('href'):
@@ -66,12 +65,14 @@ def scrape_url_for_text(url):
     :param url: URL to scrape
     :return: The text of the page
     """
-    page_content = scrape_url(url)
-    soup = BeautifulSoup(page_content, 'html.parser')
+    soup = scrape_url(url)
     for script in soup(["script","style"]):
             script.extract()
 
     return soup.get_text()
+
+def formatted_html(url):
+    return scrape_url(url).prettify()
 
 def scrape_url(url):
     """
@@ -86,7 +87,7 @@ def scrape_url(url):
     except requests.exceptions.HTTPError as e:
         logger.debug(e)
 
-    return page.content
+    return BeautifulSoup(page.content, 'html.parser')
 
 def decode_url(url):
     """
