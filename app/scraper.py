@@ -50,7 +50,6 @@ def scrape_url_for_links(url):
     for link in soup.find_all('a'):
         if link.get('href'):
             if link.string:
-                print(link.string)
                 results += link.string + ": " + link.get('href') + '\n'
             else:
                 results += link.get('href') + '\n'
@@ -69,7 +68,20 @@ def scrape_url_for_text(url):
     for script in soup(["script","style"]):
             script.extract()
 
-    return soup.get_text()
+    output = soup.get_text()
+    result = ""
+    newline = False
+    for line in output:
+        if (line != '\n' and line != '\r'):
+            if(not newline or line != ' '):
+                result += line
+                newline = False
+        else:
+            if not newline:
+                result += line
+                newline = True
+
+    return result
 
 def formatted_html(url):
     return scrape_url(url).prettify()
